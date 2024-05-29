@@ -1,18 +1,21 @@
-# Utiliser l'image de base Alpine
-FROM alpine:latest
+# Utiliser l'image de base Debian Bullseye
+FROM debian:bullseye
 
 # Installer NGINX et OpenSSL
-RUN apk update && apk add --no-cache nginx openssl
+RUN apt-get update && apt-get install -y nginx openssl
 
-# Copier les certificats dans le conteneur
-COPY certs /etc/nginx/certs
+RUN mkdir -p /etc/nginx/ssl/certs /etc/nginx/ssl/private
+
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048  \
+    -out /etc/nginx/ssl/certs/hrobin.pem \
+    -keyout /etc/nginx/ssl/private/hrobin.key \
+    -subj "/C=FR/ST=Paris/L=Paris/O=42 School/OU=hrobin.42.fr/CN=hrobin.42.fr/"
 
 # Copier le fichier de configuration NGINX dans le conteneur
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx.conf /etc/nginx/conf.d/proxy.conf
 
 # Exposer le port 443 pour le trafic HTTPS
 EXPOSE 443
 
 # Commande pour lancer NGINX en mode non-démon
 CMD ["nginx", "-g", "daemon off;"]
-
