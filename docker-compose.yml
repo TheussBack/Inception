@@ -7,20 +7,23 @@ services:
       - "443:443"
     networks:
       - webnet
+    restart: always
 
-  # wordpress:
-  #   build: ./srcs/wordpress
-  #   volumes:
-  #     - ./data/wordpress_files:/var/www/html
-  #   environment:
-  #     - WORDPRESS_DB_HOST=mariadb
-  #     - WORDPRESS_DB_USER=wp_user
-  #     - WORDPRESS_DB_PASSWORD=wp_pass
-  #     - WORDPRESS_DB_NAME=wp_database
-  #   networks:
-  #     - webnet
-  #   depends_on:
-  #     - mariadb
+  wordpress:
+    build: ./srcs/wordpress
+    volumes:
+      - ./data/wordpress_files:/var/www/html
+    environment:
+      - WORDPRESS_DB_HOST=mariadb
+      - WORDPRESS_DB_USER=wp_user
+      - WORDPRESS_DB_PASSWORD=wp_pass
+      - WORDPRESS_DB_NAME=wp_database
+    networks:
+      - webnet
+    depends_on:
+      - mariadb
+    ports:
+      - "9000:9000"
 
   mariadb:
     build: ./srcs/mariadb

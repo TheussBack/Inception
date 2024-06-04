@@ -7,6 +7,10 @@ DOCKER_COMPOSE_FILE=docker-compose.yml
 # Cibles par défaut
 .PHONY: all build up down clean
 
+# Construire et lancer les conteneurs
+all: build up
+	@echo "Docker containers are built and running."
+
 # Construire les images Docker
 build:
 	@echo "Building Docker images..."
@@ -28,10 +32,7 @@ clean: down
 	@docker system prune -f
 	@docker volume prune -f
 	@docker image prune -f
-
-# Construire et lancer les conteneurs
-all: build up
-	@echo "Docker containers are built and running."
+	@rm -rf data
 
 # Recréer les conteneurs
 rebuild: down build up
