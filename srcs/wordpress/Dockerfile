@@ -5,7 +5,7 @@ FROM debian:bullseye
 RUN apt-get update -y && \
     apt-get upgrade -y && \
     apt-get install -y wget && \
-    apt-get install -y php7.4 php7.4-fpm php7.4-mysql
+    apt-get install -y php7.4 php7.4-fpm php7.4-mysql mariadb-client
 
 # Installer WordPress CLI pour faciliter l'installation
 RUN apt-get install -y curl less bash
@@ -14,6 +14,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 # Créer un répertoire pour WordPress
 RUN mkdir -p /var/www/html
 
+COPY wp-config.php /etc
 # Créer le répertoire pour le fichier PID de PHP-FPM
 RUN mkdir -p /run/php
 
@@ -24,8 +25,9 @@ WORKDIR /var/www/html
 COPY php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
 COPY www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
+COPY wp_install.sh /etc
 # Exposer le port utilisé par PHP-FPM
 EXPOSE 9000
 
 # Commande pour démarrer PHP-FPM
-CMD ["php-fpm7.4", "-F"]
+CMD ["bash", "/etc/wp_install.sh"]
