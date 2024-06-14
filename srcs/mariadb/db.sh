@@ -20,8 +20,3 @@ cat tmp/toto
 mysql_install_db --user=mysql --ldata=/var/lib/mysql/
 mysqld --defaults-file=/etc/mysql/conf.d/50-server.cnf --user=mysql --bootstrap <tmp/toto
 exec mysqld --defaults-file=/etc/mysql/conf.d/50-server.cnf --user=mysql --console $@
-
-#RUN mysql_install_db --user=mysql --ldata=/var/lib/mysql/ # marche pas -> a mettre dans script
-#RUN service mariadb start # marche pas -> a mettre dans script
-#CREATE USER 'root'@'localhost' IDENTIFIED BY 'root';
-#ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';

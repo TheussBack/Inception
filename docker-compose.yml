@@ -8,6 +8,10 @@ services:
     networks:
       - webnet
     restart: always
+    depends_on:
+      - wordpress
+    volumes :
+      - ./data/wordpress_files:/var/www/html
 
   wordpress:
     build: ./srcs/wordpress
