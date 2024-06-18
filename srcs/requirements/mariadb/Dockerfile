@@ -5,8 +5,8 @@ FROM debian:bullseye
 RUN apt-get update && apt-get install -y mariadb-server mariadb-client
 
 # Copier le fichier de configuration MariaDB / db.sh
-COPY my.cnf /etc/mysql/conf.d/50-server.cnf
-COPY db.sh /etc/mysql/db.sh
+COPY /conf/my.cnf /etc/mysql/conf.d/50-server.cnf
+COPY /tools/db.sh /etc/mysql/db.sh
 
 RUN mkdir /run/mysqld && chown -R mysql:root /run/mysqld
 

@@ -14,7 +14,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 # Créer un répertoire pour WordPress
 RUN mkdir -p /var/www/html
 
-COPY wp-config.php /etc
+COPY /tools/wp-config.php /etc
 # Créer le répertoire pour le fichier PID de PHP-FPM
 RUN mkdir -p /run/php
 
@@ -22,10 +22,10 @@ RUN mkdir -p /run/php
 WORKDIR /var/www/html
 
 # Copier le fichier de configuration PHP-FPM
-COPY php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
-COPY www.conf /etc/php/7.4/fpm/pool.d/www.conf
+COPY /conf/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf
+COPY /conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
-COPY wp_install.sh /etc
+COPY /tools/wp_install.sh /etc
 # Exposer le port utilisé par PHP-FPM
 EXPOSE 9000
 

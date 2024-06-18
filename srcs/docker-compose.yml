@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   nginx:
-    build: ./srcs/nginx
+    build: ./requirements/nginx
     ports:
       - "443:443"
     networks:
@@ -14,9 +14,11 @@ services:
       - ./data/wordpress_files:/var/www/html
 
   wordpress:
-    build: ./srcs/wordpress
+    build: ./requirements/wordpress
     volumes:
       - ./data/wordpress_files:/var/www/html
+    env_file:
+      - .env
     environment:
       - WORDPRESS_DB_HOST=mariadb
       - WORDPRESS_DB_USER=wp_user
@@ -25,21 +27,29 @@ services:
     networks:
       - webnet
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
     ports:
       - "9000:9000"
 
   mariadb:
-    build: ./srcs/mariadb
+    build: ./requirements/mariadb
     volumes:
       - ./data/mariadb:/var/lib/mysql
+    env_file:
+      - .env
     environment:
-      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_ROOT_PASSWORD=hrobin
       - MYSQL_DATABASE=wp_database
-      - MYSQL_USER=wp_user
+      - MYSQL_USER=mysql
       - MYSQL_PASSWORD=wp_pass
     networks:
       - webnet
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p${MYSQL_ROOT_PASSWORD} || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 networks:
   webnet:

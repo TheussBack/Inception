@@ -12,7 +12,7 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048  \
     -subj "/C=FR/ST=Paris/L=Paris/O=42 School/OU=hrobin.42.fr/CN=hrobin.42.fr/"
 
 # Copier le fichier de configuration NGINX dans le conteneur
-COPY ./nginx.conf /etc/nginx/conf.d/proxy.conf
+COPY /conf/nginx.conf /etc/nginx/conf.d/proxy.conf
 
 # Exposer le port 443 pour le trafic HTTPS
 EXPOSE 443

@@ -2,7 +2,7 @@
 PROJECT_NAME=Inception
 
 # Variables pour les chemins
-DOCKER_COMPOSE_FILE=docker-compose.yml
+DOCKER_COMPOSE_FILE=./srcs/docker-compose.yml
 
 # Cibles par défaut
 .PHONY: all build up down clean
@@ -32,7 +32,8 @@ clean: down
 	@docker system prune -f
 	@docker volume prune -f
 	@docker image prune -f
-	@rm -rf data
+	@sudo chmod -R 777 ./srcs/data
+	@rm -rf ./srcs/data
 
 # Recréer les conteneurs
 rebuild: down build up
